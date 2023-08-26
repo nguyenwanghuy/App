@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import background from '../../assets/background.jpg';
 import { useFormik } from 'formik';
 import { basicShemas } from '../../schemas';
+import AuthenContext from '../../context/AuthenContext/AuthenContext';
+import { Navigate } from 'react-router-dom';
 
 const Register = () => {
+  
+  const {auth} = useContext(AuthenContext)
   const myStyle = {
     backgroundImage: `url(${background})`,
     height: '100vh',
@@ -27,7 +31,9 @@ const Register = () => {
     });
 
   console.log(errors);
-
+  if(auth.isAuthenticated) {
+    return <Navigate to="/"/>
+  }
   return (
     <div className='flex h-screen justify-center items-center' style={myStyle}>
       <div className='bg-gray-700 flex-col items-center border p-10'>
