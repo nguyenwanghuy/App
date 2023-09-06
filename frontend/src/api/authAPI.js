@@ -5,6 +5,8 @@ const authAPI = {
     
     register: (values) => axiosInstance.post("/auth/register", values),
     authInfo: () =>axiosInstance.get("/auth/me"),
+    searchUser:(values) => axiosInstance.get(`/users?fullname=${values}`),
+    
 }
 
 export default authAPI;

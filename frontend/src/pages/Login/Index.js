@@ -27,11 +27,12 @@ const Login = () => {
   const formik =
     useFormik({
       initialValues: {
-        username: '',
         email: '',
         password: '',
       },
+      
       onSubmit: async (values) => {
+      
         try {
         setLoading(true); 
         setError(null)

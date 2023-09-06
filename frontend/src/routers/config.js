@@ -7,7 +7,7 @@ import Register from '../pages/Register/Index';
 export const routes = [
   {
     path: '/',
-    component: <PrivateRoute component={ChatPage}/>,
+    component: <PrivateRoute component={ChatPage }/>,
   },
   {
     path: '/login',
