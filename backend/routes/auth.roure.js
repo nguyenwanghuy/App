@@ -111,5 +111,19 @@ router.get('/me',authMiddleware ,async (req, res) => {
     userInfo: currentUser,
   });
 })
+router.get('/',async (req, res) => {
+  try {
+    const user =  await UserModel.find()
+    res.json({
+      data:user
+    })
+  } catch (error) {
+    res.json({
+      message: 'loi',
+      
+    })
+  }
+ 
+})
 
 export default router;

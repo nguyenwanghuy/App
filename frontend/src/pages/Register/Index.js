@@ -1,13 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext,useState } from 'react';
 import background from '../../assets/background.jpg';
 import { useFormik } from 'formik';
 import { basicShemas } from '../../schemas';
 import AuthenContext from '../../context/AuthenContext/AuthenContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import authAPI from '../../api/authAPI';
 
 const Register = () => {
-  
   const {auth} = useContext(AuthenContext)
+  const [loading,setLoading] = useState(false);
+  const [error,setError] = useState(null);
+  const navigate = useNavigate()
   const myStyle = {
     backgroundImage: `url(${background})`,
     height: '100vh',
@@ -15,22 +18,34 @@ const Register = () => {
     backgroundRepeat: 'no-repeat',
   };
 
-  const onSubmit = (value) => {
-    console.log('submit');
-  };
+  // const onSubmit = (value) => {
+  //   console.log('submit');
+  // };
 
-  const { values, errors, touched, handleChange, handleSubmit, handleBlur } =
+  const formik =
     useFormik({
       initialValues: {
-        username: '',
+        fullname: '',
         email: '',
         password: '',
       },
-      validationSchema: basicShemas,
-      onSubmit,
+      // validationSchema: basicShemas,
+      onSubmit: async  (values) => {
+        try {
+          setLoading(true);
+          setError(null)
+          await authAPI.register(values);
+          navigate("/login")
+        } catch (error) {
+          setError(error.response.data.message)
+        } finally {
+          setLoading(false);
+        }
+      }
     });
 
-  console.log(errors);
+  // console.log(errors);
+  const { values, errors, touched, handleChange, handleSubmit, handleBlur } =formik
   if(auth.isAuthenticated) {
     return <Navigate to="/"/>
   }
@@ -47,20 +62,20 @@ const Register = () => {
         >
           <input
             type='text'
-            id='username'
-            name='username'
+            id='fullname'
+            name='fullname'
             className={
-              errors.username && touched.username
+              errors.fullname && touched.fullname
                 ? 'block w-full rounded-sm p-2  border border-2 border-rose-600'
                 : 'block w-full rounded-sm p-2 mb-2 border'
             }
-            value={values.username}
+            value={values.fullname}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder='Username'
+            placeholder='fullname'
           />
-          {errors.username && touched.username && (
-            <p className='text-xs text-rose-600 mb-2'>{errors.username}</p>
+          {errors.fullname && touched.fullname && (
+            <p className='text-xs text-rose-600 mb-2'>{errors.fullname}</p>
           )}
           <input
             type='email'
@@ -96,11 +111,13 @@ const Register = () => {
           {errors.password && touched.password && (
             <p className='text-xs text-rose-600 mb-2'>{errors.password}</p>
           )}
+          {error && <p style={{color:"red"}}>{error}</p>}
           <button
             className='bg-blue-500 text-white block w-full rounded-sm p-2'
             type='submit'
+           
           >
-            Register
+            {loading?"Loading..." : "Register"}
           </button>
         </form>
       </div>
