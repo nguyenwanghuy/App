@@ -1,21 +1,22 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { routes } from './routers/config';
-import AuthState from './context/AuthenContext/AuthState';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import Header from './layouts/Header';
+import Footer from './layouts/Footer';
+import Thematic from './pages/Thematic';
+import CardItem from './components/CardItem';
 
 function App() {
   return (
-    <BrowserRouter>
-    <AuthState>
-      
-    <Routes>
-        {routes.map((route, index) => {
-          const { path, component } = route;
-          return <Route key={index} path={path} element={component} />;
-        })}
-      </Routes>
-
-    </AuthState>
-    </BrowserRouter>
+    <div className='bg-slate-200'>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path='/chuyen-de' element={<Thematic />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </div>
   );
 }
 
