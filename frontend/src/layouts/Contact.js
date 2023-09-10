@@ -8,7 +8,6 @@ const Contact = () => {
     console.log(res);
   }
 
-
   return (
     
           <input type="text" name="search" id="search" title="Enter to Search"
