@@ -119,8 +119,8 @@ const Header = () => {
             Hỏi gia sư
           </NavLink>
 
-          <NavLink to='/sign-up' activeStyle>
-            Tài liệu
+          <NavLink to='/chuyen-de' activeStyle>
+            Chuyên đề
           </NavLink>
           {/* Second Nav */}
           {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
