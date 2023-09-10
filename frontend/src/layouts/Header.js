@@ -115,7 +115,7 @@ const Header = () => {
         <NavLink to='/'>Logo</NavLink>
         <Bars />
         <NavMenu>
-          <NavLink to='/about' activeStyle>
+          <NavLink to='/hoi-gia-su' activeStyle>
             Hỏi gia sư
           </NavLink>
 

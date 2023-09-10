@@ -1,0 +1,45 @@
+.content-mid {
+    padding: 80px;
+    display:flex;
+    justify-content: space-around;
+   
+}
+.askSub {
+    padding: 64px 0;
+    background-color: #f8f8fa;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 24px;
+    text-align: center;
+}
+
+.askSub-mid {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    margin-bottom: 50px;
+}
+.ant-tabs-tab-btn {
+    color: gray;
+    font-size: 20px;
+    margin-left: 300px;
+}
+
+.fame-wo {
+font-size: 12px;
+ text-align: center;
+ 
+}
+.fame-wo-ni{
+    padding: 35px;
+    margin: 20px;
+    width: 350px;
+    display: inline-block;
+   background-image: url(https://colearn.vn/ui-new/images/block-card-bg.svg);
+   background-color: #fff;
+    background-size: 102%;
+    background-repeat: no-repeat;
+    background-position: -4px -4px;
+    border-radius: 0 75px 75px 75px;
+    min-height: 400px;
+}
