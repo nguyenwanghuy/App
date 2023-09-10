@@ -1,7 +1,5 @@
 import React from 'react';
 import { Carousel,Tabs } from 'antd';
-import Contact from '../../layouts/Contact';
-import Sidebar from '../../components/Sidebar';
 import  '../../assets/styles/home.css'
 
 const HomePage = () => {
