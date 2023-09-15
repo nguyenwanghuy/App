@@ -40,7 +40,7 @@ function a11yProps(index) {
   };
 }
 
-const AuthDraw = () => {
+const AuthDraw = ({ onClose }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -60,10 +60,10 @@ const AuthDraw = () => {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Login />
+        <Login onClose={onClose} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Register />
+        <Register onClose={onClose} />
       </CustomTabPanel>
     </Box>
   );

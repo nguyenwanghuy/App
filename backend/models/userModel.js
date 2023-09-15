@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  fullname: {
+  username: {
     type: String,
     required: true,
   },
@@ -18,7 +18,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  //   avatar: {
+  //     type: String,
+  //   },
 });
 
-const UserModel = mongoose.model("users", UserSchema);
+const UserModel = mongoose.model('users', UserSchema);
 export default UserModel;
