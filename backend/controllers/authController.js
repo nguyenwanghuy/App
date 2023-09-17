@@ -6,7 +6,6 @@ import UserModel from '../models/userModel.js';
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  //   1. Check authentication
   const existingUser = await UserModel.findOne({ email });
 
   if (!existingUser) {
@@ -14,7 +13,6 @@ const login = asyncHandler(async (req, res) => {
     throw new Error('Invalid credentials');
   }
 
-  // 2. Check password
   const isMatchPassword = await bcrypt.compare(password, existingUser.password);
 
   if (!isMatchPassword) {
@@ -22,7 +20,6 @@ const login = asyncHandler(async (req, res) => {
     throw new Error('Email or password is not correct!');
   }
 
-  // Create JWT Token & Response to client
   const jwtPayload = {
     email: existingUser.email,
     id: existingUser.id,
@@ -42,7 +39,6 @@ const login = asyncHandler(async (req, res) => {
 const register = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
 
-  // 1. Check user exist
   const existingUser = await UserModel.findOne({ email });
 
   if (existingUser) {
@@ -50,22 +46,17 @@ const register = asyncHandler(async (req, res) => {
     throw new Error('User has already exist');
   }
 
-  // 2. Create new user, insert into DB
-  // 2.1 Has password (mã hoá password)
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // 2.2 Create new user object
   const newUser = new UserModel({
     email,
     username,
     password: hashedPassword,
   });
 
-  // Insert new record into collection
   await newUser.save();
 
-  // 3. Response to client
   res.status(201).json({
     message: 'Register new user successfully',
   });
