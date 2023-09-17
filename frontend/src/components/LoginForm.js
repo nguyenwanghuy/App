@@ -1,63 +1,96 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 import '../assets/login.css';
+import { useFormik } from 'formik';
+import AuthenContext from '../context/AuthenContext/AuthenContext';
+import authAPI from '../api/authAPI';
 
-// import { useFormik } from "formik";
-// import { useContext } from "react";
-// import AuthContext from "../../contexts/AuthContext/AuthContext";
-// import { Link, useNavigate } from "react-router-dom";
-// import AuthService from "../../services/authService";
-// import { Input, Button, Form, message } from "antd";
+const LoginFormValidationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Email does not valid')
+    .required('Email is required'),
+  password: yup.string().required('Password is required'),
+});
 
-// const authService = new AuthService();
+const Login = (props) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const { auth, handleLogin } = useContext(AuthenContext);
 
-// const LoginPage = () => {
-//   const navigate = useNavigate();
-//   const { handleLogin } = useContext(AuthContext);
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: async (values) => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await authAPI.login(values);
+        const { accessToken } = response.data;
+        // Save access token to local storage
+        localStorage.setItem('accessToken', accessToken);
 
-//   const { handleSubmit, handleChange, values } = useFormik({
-//     initialValues: {
-//       email: "",
-//       password: "",
-//     },
-//     onSubmit: async (values) => {
-//       try {
-//         const response = await authService.login(values);
-//         if (response.status === 200) {
-//           localStorage.setItem("accessToken", response?.data?.accessToken);
-//           await handleLogin(values);
-//           message.success("Đăng nhập thành công");
-//           navigate("/");
-//         }
-//       } catch (error) {
-//         message.error(error.response.data.message || "Error");
-//       }
-//     },
-//   });
+        // Call logic after login successfully
+        await handleLogin();
+        props.onClose();
+      } catch (error) {
+        console.log(error);
+        setError(error.response.data.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    validationSchema: LoginFormValidationSchema,
+  });
 
-const Login = () => {
+  const { handleSubmit, handleChange, values, isValid, errors } = formik;
+
   return (
     <div className='login-page'>
       <div className='login-container'>
         <h1>Đăng nhập</h1>
 
-        <form className='login-form'>
+        <form onSubmit={handleSubmit} className='login-form'>
           <label htmlFor='email'>Email</label>
           <input
             id='email'
             name='email'
             type='text'
             placeholder='Enter your email'
+            onChange={handleChange}
+            value={values.email}
           />
+          {errors?.email && (
+            <small className='text-danger'>{errors.email}</small>
+          )}
           <label htmlFor='password'>Password</label>
           <input
             id='password'
             name='password'
             type='password'
             placeholder='Enter your password'
+            onChange={handleChange}
+            value={values.password}
           />
-          <button type='submit' className='auth-button'>
-            Login
+          {errors?.password && (
+            <small className='text-danger'>{errors.password}</small>
+          )}
+          {error && (
+            <p
+              style={{
+                color: 'red',
+                margin: '10px 0',
+              }}
+            >
+              {error}
+            </p>
+          )}
+          <button type='submit' className='auth-button' disabled={!isValid}>
+            {loading ? 'Submitting...' : 'Submit'}
           </button>
         </form>
       </div>

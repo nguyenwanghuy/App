@@ -1,6 +1,6 @@
 import asyncHandler  from 'express-async-handler'
 import PostModel from "../models/post.model.js";
-import UserModel from "../models/user.model.js";
+import UserModel from "../models/userModel.js";
 import { text } from 'express';
 
 //get all  posts by id
@@ -27,7 +27,7 @@ const getAllPosts = async (req, res) => {
 //get post by id
 const getById = async (req, res) => {
   try {
-    const {id} = req.users;
+    const {id} = req.user;
     const posts = await PostModel.find({user: id})
     res.json({
         data: posts,
@@ -42,8 +42,8 @@ const getById = async (req, res) => {
 const createPost = async(req,res) => {
     const { title, content,image } = req.body;
     // const userId = req.user.id;
-    const {id} = req.users;
-   
+    const {id} = req.user;
+    console.log(id)
     const currentUser = await UserModel.findById(id);
     if (!currentUser) {
         res.status = 400;
@@ -56,7 +56,7 @@ const createPost = async(req,res) => {
         user:id
     })
     
-    console.log(newPost)
+    // console.log(newPost)
     //save the new post
     await newPost.save();
     res.status(201).json({

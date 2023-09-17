@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import AuthenContext from './AuthenContext'
-// import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import AuthenContext from './AuthenContext';
+import axios from 'axios';
 import authAPI from '../../api/authAPI';
 
 const AuthState = ({children}) => {
@@ -28,10 +28,10 @@ const AuthState = ({children}) => {
     
     const handleLogOut = () =>{
       setAuth({
-        isAuthenticated: false,
-        user:{},
+        isAuthenticated:false,
+          user:{},
       })
-    }
+  }
     useEffect(()=>{
       const accessToken = localStorage.getItem('accessToken')
       // call API/me => check token
@@ -42,16 +42,16 @@ const AuthState = ({children}) => {
   },[])
   return (
     <AuthenContext.Provider
-    value={{
+      value={{
         auth,
         handleLogin,
         handleLogOut,
         fetchCurrent
     }}
     >
-        {children}
+      {children}
     </AuthenContext.Provider>
-  )
-}
+  );
+};
 
-export default AuthState
+export default AuthState;

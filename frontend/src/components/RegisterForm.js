@@ -1,60 +1,60 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../assets/login.css';
+import React, { useContext, useState } from 'react';
+import { useFormik } from 'formik';
+import AuthenContext from '../context/AuthenContext/AuthenContext';
+import authAPI from '../api/authAPI';
 
-// import { useFormik } from "formik";
-// import { useContext } from "react";
-// import AuthContext from "../../contexts/AuthContext/AuthContext";
-// import { Link, useNavigate } from "react-router-dom";
-// import AuthService from "../../services/authService";
-// import { Input, Button, Form, message } from "antd";
+const Register = (props) => {
+  const { handleLogin } = useContext(AuthenContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-// const authService = new AuthService();
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+    },
+    onSubmit: async (values) => {
+      try {
+        setLoading(true);
+        setError(null);
+        await authAPI.register(values);
 
-// const LoginPage = () => {
-//   const navigate = useNavigate();
-//   const { handleLogin } = useContext(AuthContext);
+        await handleLogin();
 
-//   const { handleSubmit, handleChange, values } = useFormik({
-//     initialValues: {
-//       email: "",
-//       password: "",
-//     },
-//     onSubmit: async (values) => {
-//       try {
-//         const response = await authService.login(values);
-//         if (response.status === 200) {
-//           localStorage.setItem("accessToken", response?.data?.accessToken);
-//           await handleLogin(values);
-//           message.success("Đăng nhập thành công");
-//           navigate("/");
-//         }
-//       } catch (error) {
-//         message.error(error.response.data.message || "Error");
-//       }
-//     },
-//   });
+        if (props.onClose) {
+          props.onClose();
+        }
+      } catch (error) {
+        setError(error.response.data.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
-const Register = () => {
+  const { handleSubmit, handleChange, isValid } = formik;
+
   return (
     <div className='login-page'>
       <div className='login-container'>
-        <h1>Đăng kí</h1>
-        <label htmlFor='fullname'>Họ tên</label>
-        <input
-          id='fullname'
-          name='fullname'
-          type='text'
-          placeholder='Enter your email'
-        />
-
-        <form className='login-form'>
+        <form className='login-form' onSubmit={handleSubmit}>
+          <h1>Đăng kí</h1>
+          <label htmlFor='username'>Họ tên</label>
+          <input
+            id='username'
+            name='username'
+            type='text'
+            placeholder='Enter your username'
+            onChange={handleChange}
+          />
           <label htmlFor='email'>Email</label>
           <input
             id='email'
             name='email'
             type='text'
             placeholder='Enter your email'
+            onChange={handleChange}
           />
           <label htmlFor='password'>Password</label>
           <input
@@ -62,9 +62,24 @@ const Register = () => {
             name='password'
             type='password'
             placeholder='Enter your password'
+            onChange={handleChange}
           />
-          <button type='submit' className='auth-button'>
-            Register
+          {error && (
+            <p
+              style={{
+                color: 'red',
+                margin: '10px 0',
+              }}
+            >
+              {error}
+            </p>
+          )}
+          <button
+            className='btn btn-primary w-100'
+            type='submit'
+            disabled={!isValid}
+          >
+            {loading ? 'Submitting...' : 'Submit'}
           </button>
         </form>
       </div>

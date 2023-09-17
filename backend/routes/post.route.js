@@ -3,7 +3,7 @@ import fs from "fs";
 import { v2 as cloudinary } from "cloudinary"
 import PostController from "../controllers/PostController.js";
 import uploadFile from "../configs/multer.conflig.js";
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 import PostModel from "../models/post.model.js";
 
 
@@ -26,9 +26,7 @@ router.get("/search", PostController.search);
 router.post("/upload-image",authMiddleware , uploadFile.single('image'), async (req, res) => {
     try {
         // const {id} = req.users;
-
     const file = req.file;
-
     // upload file to cloud 
     const result = await cloudinary.uploader.upload(file.path, {
         resource_type: "auto",
@@ -39,21 +37,17 @@ router.post("/upload-image",authMiddleware , uploadFile.single('image'), async (
      
     const imageURL = result && result.secure_url;
     // url => monggo
-    const {id} = req.users;
-    const user = req.users.id;
-    // console.log(user)
+    
+    // const {id} = req.users;
+    // const user = req.users.id;
     
 
-
-    
-    return res.json({
+    return res.send({
         message: "Uploading image successfully",
-        data: imageURL
-      
+       data: imageURL
     });
     } catch (error) {
         res.status(500).send(error);
-        
     }
 })
 

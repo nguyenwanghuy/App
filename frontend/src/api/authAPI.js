@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance"
+import axiosInstance from './axiosInstance';
 
 const authAPI = {
     login: (values) => axiosInstance.post("/auth/login", values),
