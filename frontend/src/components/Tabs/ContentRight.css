@@ -4,10 +4,19 @@
     border: 1px solid #e6e6e6;
     box-shadow: 0 4px 16px rgba(0,0,0,.1);
     border-radius: 18px;
-  
+    width: 100%;
+   
+   
 }
 
 .contain-right-top{
     display: flex;
+    padding: 20px;
+    /* border-top: 1px solid red ; */
+    background-color: rgb(245, 237, 238);
+   
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    border-radius: 18px;
     
+   
 }

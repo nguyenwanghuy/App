@@ -6,6 +6,9 @@ const authAPI = {
     register: (values) => axiosInstance.post("/auth/register", values),
     authInfo: () =>axiosInstance.get("/auth/me"),
     searchUser:(values) => axiosInstance.get(`/users?fullname=${values}`),
+    createPost:(values) => axiosInstance.post("/posts",values),
+    getAllPosst:() => axiosInstance.get("/posts"),
+    searchText:(values) => axiosInstance.get(`/posts/search?title=${values}`),
     
 }
 

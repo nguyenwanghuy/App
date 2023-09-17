@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(logAPI)
 
 router.use("/auth", authRouter)
-router.use("/posts", authMiddleware,postRouter)
+router.use("/posts", authMiddleware,postRouter) //auth
 router.use("/users",userRouter )
 router.use("/comment",commentRouter)
 

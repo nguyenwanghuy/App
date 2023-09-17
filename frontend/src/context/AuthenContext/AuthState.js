@@ -9,7 +9,8 @@ const AuthState = ({children}) => {
         user:{},
     })
 //call api
-    const handleLogin = async () => {
+
+    const fetchCurrent = async () => {
       try {
         const response = await authAPI.authInfo()
         const data = response.data;
@@ -20,6 +21,9 @@ const AuthState = ({children}) => {
       } catch (error) {
         console.log(error)
       }
+    }
+    const handleLogin = async () => {
+    await fetchCurrent()
     }
     
     const handleLogOut = () =>{
@@ -32,7 +36,7 @@ const AuthState = ({children}) => {
       const accessToken = localStorage.getItem('accessToken')
       // call API/me => check token
       if(accessToken) {
-          handleLogin();
+          fetchCurrent();
       }
      
   },[])
@@ -41,7 +45,8 @@ const AuthState = ({children}) => {
     value={{
         auth,
         handleLogin,
-        handleLogOut
+        handleLogOut,
+        fetchCurrent
     }}
     >
         {children}

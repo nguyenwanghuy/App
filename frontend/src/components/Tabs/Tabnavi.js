@@ -27,8 +27,9 @@ const Tabnavi = () => {
   return (
    <>
    <div style={{
-    display:'grid',
-    gridTemplateColumns:'20% 80%',
+    width: '100%',
+    display:'flex',
+    justifyContent: "space-between",
     padding:'30px',
     }}>
    <Menu
@@ -42,7 +43,12 @@ const Tabnavi = () => {
       }}
       items={items}
     />
-      <ContentRight/>
+     <div style={{
+      flex: 1,
+     marginLeft: '30px',
+     }}>
+     <ContentRight/>
+     </div>
    </div>
     
    </>
