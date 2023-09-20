@@ -1,3 +1,4 @@
+import UserModel from '../models/userModel.js';
 import VideoModel from '../models/videoModel.js';
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -7,31 +8,35 @@ cloudinary.config({
   api_secret: 'gXldLMlEHGYIDKwoKTBaiSxPEZU',
 });
 
-export const uploadVideo = async (req, res) => {
-  const file = req.file;
+const getAll = async (req, res) => {
+  const videos = await VideoModel.find();
+  res.send({ data: videos });
+};
 
-  const result = await cloudinary.uploader.upload(file.path, {
-    resource_type: 'video',
-    folder: 'video',
-  });
-
-  const videoUrl = result && result.secure_url;
-
-  if (!videoUrl) {
-    throw new Error('Video upload failed');
+const addVideo = async (req, res) => {
+  const { title, videoUrl, subject } = req.body;
+  const { id } = req.user;
+  console.log(id);
+  const currentUser = await UserModel.findById(id);
+  if (!currentUser) {
+    res.status = 400;
+    throw new Error('User not found');
   }
-
   const newVideo = new VideoModel({
-    videoUrl: videoUrl,
+    title,
+    videoUrl,
+    subject,
+    user: id,
   });
 
   await newVideo.save();
-
-  console.log(result);
-  return res.send({ messages: 'Upload video successfully' });
+  res.status(201).json({
+    data: newVideo,
+    message: 'Upload new  video successfully',
+  });
 };
 
-export const deleteVideo = async (req, res) => {
+const deleteVideo = async (req, res) => {
   try {
     const video = await VideoModel.findById(req.params.id);
     if (!video) throw new Error('Video not found');
@@ -46,7 +51,7 @@ export const deleteVideo = async (req, res) => {
   }
 };
 
-export const getVideo = async (req, res) => {
+const getVideo = async (req, res) => {
   try {
     const video = await VideoModel.findById(req.params.id);
     res.status(200).send(video);
@@ -56,3 +61,52 @@ export const getVideo = async (req, res) => {
     });
   }
 };
+
+const searchVideo = async (req, res) => {
+  const query = req.query.q;
+  try {
+    const video = await VideoModel.findById({
+      title: { $regex: query, $options: 'i' },
+    });
+    res.status(200).send(video);
+  } catch (error) {
+    res.status(500).send({
+      error: error.messages,
+    });
+  }
+};
+
+const uploadVideo = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const file = req.file;
+
+    console.log(file);
+
+    const result = await cloudinary.uploader.upload(file.path, {
+      resource_type: 'video',
+      folder: 'video',
+    });
+
+    fs.unlinkSync(file.path);
+
+    const videoUrl = result && result.secure_url;
+
+    return res.json({
+      message: 'Upload video successfully',
+      data: videoUrl,
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+const videoController = {
+  getAll,
+  addVideo,
+  deleteVideo,
+  getVideo,
+  searchVideo,
+  uploadVideo,
+};
+export default videoController;
