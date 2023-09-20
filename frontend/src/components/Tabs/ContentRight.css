@@ -8,7 +8,6 @@
    
    
 }
-
 .contain-right-top{
     display: flex;
     padding: 20px;
@@ -17,6 +16,29 @@
    
     box-shadow: 0 4px 16px rgba(0,0,0,.1);
     border-radius: 18px;
+}
+.anticon svg {
+    margin-bottom: 15px;
+}
+.comm {
+  padding: 30px;
+  
+}
+
+.comm-ip {
+  border: none;
+  outline: none;
+  width: 80%;
+  font-size: 20px;
+
+}
+
+
+.comm-send{
+    margin: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(203, 28, 34);
+
     
-   
 }

@@ -1,11 +1,11 @@
 import UserModel from '../models/userModel.js';
 import VideoModel from '../models/videoModel.js';
 import { v2 as cloudinary } from 'cloudinary';
-
+import fs from 'fs';
 cloudinary.config({
-  cloud_name: 'dmlc8hjzu',
-  api_key: '463525567462749',
-  api_secret: 'gXldLMlEHGYIDKwoKTBaiSxPEZU',
+  cloud_name: 'dxsyy0ocl',
+  api_key: '719715235574389',
+  api_secret: 'ICZrIwcuhpQr24efU2DZ6CjAEIQ',
 });
 
 const getAll = async (req, res) => {

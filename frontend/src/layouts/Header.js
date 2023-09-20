@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <>
       <Nav>
-        <NavLink to='/'>Logo</NavLink>
+        <NavLink to='/'>LEARN</NavLink>
         <Bars />
         <NavMenu>
           <NavLink to='/hoi-gia-su' activeStyle>

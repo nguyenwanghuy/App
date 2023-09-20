@@ -43,7 +43,6 @@ const createPost = async(req,res) => {
     const { title, content,image } = req.body;
     // const userId = req.user.id;
     const {id} = req.user;
-    console.log(id)
     const currentUser = await UserModel.findById(id);
     if (!currentUser) {
         res.status = 400;
@@ -56,7 +55,7 @@ const createPost = async(req,res) => {
         user:id
     })
     
-    // console.log(newPost)
+    console.log(newPost._id)
     //save the new post
     await newPost.save();
     res.status(201).json({
@@ -91,16 +90,21 @@ const createPost = async(req,res) => {
     const remove = async (req, res) => {
       try {
         const postId = req.params.id;
-        const existingPost = await PostModel.findByIdAndDelete(postId)
-        return res.json({
-          message: "Delete successfully",
-        })
+        const {id} = req.user;
+       
+        // console.log(postId,'postid')
+        // console.log('hello' ,id)
+          const existingPost = await PostModel.findByIdAndDelete(postId);
+          console.log(existingPost)
+          return res.json({
+            message: "Delete successfully",
+            data: existingPost
+          })
       } catch (error) {
         res.status(400).json({
           message: "Error while deleting"
         })
       }
-    
     };
 //search title
     const search = async (req, res) => {
