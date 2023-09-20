@@ -10,8 +10,12 @@ const authAPI = {
     deletePost:(postId) => axiosInstance.delete(`/posts/${postId}`),
     searchText:(values) => axiosInstance.get(`/posts/search?title=${values}`),
     createComment:(values) => axiosInstance.post("/comment",values),
-    getAllComments:() => axiosInstance.get("/comment")
+    getAllComments:() => axiosInstance.get("/comment"),
+
+    getAllVideos: () => axiosInstance.get('/video'),
+    addVideo: (values) => axiosInstance.post('/video/upload', values),
 
 }
+ 
 
 export default authAPI;

@@ -134,9 +134,9 @@ const ContentRight = () => {
                 />
 
 
-            </div>
-        </div>
-    )
-}
+    </div>
+    </div>
+  );
+};
 
-export default ContentRight
+export default ContentRight;

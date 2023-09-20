@@ -1,9 +1,9 @@
-import React , { useContext, useEffect, useState} from 'react'
-import { Carousel,Button, Tooltip } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { Carousel, Button, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Tabnavi from '../../components/Tabs/Tabnavi.js'
-import  '../../assets/styles/asktutor.css'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Tabnavi from '../../components/Tabs/Tabnavi.js';
+import '../../assets/styles/asktutor.css';
 import authAPI from '../../api/authAPI.js';
 import imageAPI from '../../api/imageAPI.js';
 import { PostContext } from '../../context/PostContext.js';
@@ -12,62 +12,73 @@ import AuthenContext from '../../context/AuthenContext/AuthenContext.js';
 
 
 const AskTutor = () => {
-
-  const [resUpload, setResUpload] = useState(false)
+  const [resUpload, setResUpload] = useState(false);
   const [postData, setPostData] = useState({
-    title: "",
-    content: "",
-    image: "",
-  })
+    title: '',
+    content: '',
+    image: '',
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [searchResults, setSearchResults] = useState([]); // State for search results
 
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
-  const {setAllPost} = useContext(PostContext)
+  const { setAllPost } = useContext(PostContext);
   // get all posts
-  useEffect(()=> {
+  useEffect(() => {
     const getAll = async () => {
-      const respone = await authAPI.getAllPosst()
-      if(respone) {
-        setAllPost(respone.data.data)
+      const respone = await authAPI.getAllPosst();
+      if (respone) {
+        setAllPost(respone.data.data);
       }
-        return respone
-    }
-    getAll()
-  }, [resUpload])
+      return respone;
+    };
+    getAll();
+  }, [resUpload]);
 
-//upload file
+  //upload file
   const handleFileChange = async (e) => {
-    const file =   e.target.files[0]
-    if(!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const data = new FormData();
-      data.append("image",file)
-      const imagess= await imageAPI.uploadImage(data)
-      setIsLoading(false)
-     
-      setPostData({...postData,image:imagess.data.data})
+      data.append('image', file);
+      const imagess = await imageAPI.uploadImage(data);
+      setIsLoading(false);
+
+      setPostData({ ...postData, image: imagess.data.data });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
   // console.log(postData)
 // handle upload
   const handleUpload = async () => {
-     const res = await authAPI.createPost(postData)
-     if(res) {
-      setResUpload(true)
-      setModal(false)
-     }
-  }
- 
-// search 
-const onSeach = async (searchTitle) => {
-  const res = await authAPI.searchText(searchTitle)
-  console.log(res);
-}
+    const res = await authAPI.createPost(postData);
+    if (res) {
+      setResUpload(true);
+      setModal(false);
+    }
+  };
+
+  // search
+  // const onSearch = async (searchTitle) => {
+  //   const res = await authAPI.searchText(searchTitle);
+  //   console.log(res);
+  // };
+
+  const onSearch = async () => {
+    try {
+      const response = await authAPI.searchText(searchQuery);
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const contentStyle = {
     height: '460px',
     backgroundImage:
@@ -82,16 +93,16 @@ const onSeach = async (searchTitle) => {
     backgroundSize: '105%',
   };
 
-  const handleAskQuestionClick = () => {
-    if (!isUserLoggedIn) {
-      window.alert('Vui lòng đăng nhập để đặt câu hỏi.');
-    } else {
-      console.log('đặt câu hỏi thành công');
-    }
-  };
+  // const handleAskQuestionClick = () => {
+  //   if (!isUserLoggedIn) {
+  //     window.alert('Vui lòng đăng nhập để đặt câu hỏi.');
+  //   } else {
+  //     console.log('đặt câu hỏi thành công');
+  //   }
+  // };
 
-  const {auth} = useContext(AuthenContext)
-  const isUserLoggedIn = auth.isAuthenticated
+  // const {auth} = useContext(AuthenContext)
+  // const isUserLoggedIn = auth.isAuthenticated
   return (
     <>
       <Carousel autoplay>
@@ -103,19 +114,40 @@ const onSeach = async (searchTitle) => {
         </div>
       </Carousel>
 
-  <div style={{display:'flex',justifyContent:"space-around",padding:'30px', width:'100%'}} >
-    <h2 className='text-top'>HỎI BÀI</h2>
-   <form style={{display:'flex'}}>
-   <input className='search' type="text" name="search" id="search" title="Enter to Search" placeholder='Hãy nhập từ khoá tìm kiếm'
-          onKeyDown={(e) => {
-            if(e.key === "Enter") {
-              onSeach(e.currentTarget.value)
-            }
-          }} />
-    <Tooltip  title="Search">
-        <Button style={{marginTop:'15px'}} shape="circle" icon={<SearchOutlined />} />
-      </Tooltip>
-   </form>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          padding: '30px',
+          width: '100%',
+        }}
+      >
+        <h2 className='text-top'>HỎI BÀI</h2>
+        <form style={{ display: 'flex' }}>
+          <input
+            className='search'
+            type='text'
+            name='search'
+            id='search'
+            title='Enter to Search'
+            placeholder='Hãy nhập từ khoá tìm kiếm'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onSearch();
+              }
+            }}
+          />
+          <Tooltip title='Search'>
+            <Button
+              style={{ marginTop: '15px' }}
+              shape='circle'
+              icon={<SearchOutlined />}
+              onClick={onSearch}
+            />
+          </Tooltip>
+        </form>
 
     <button className='ask' color="danger" onClick={toggle}>
        Đặt câu hỏi
