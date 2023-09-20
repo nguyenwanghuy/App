@@ -3,25 +3,23 @@ import {
   MDBCard,
   MDBCardBody,
   MDBCardTitle,
-  MDBCardText,
-  MDBCardImage,
-  MDBBtn,
   MDBRipple,
 } from 'mdb-react-ui-kit';
 
-const CardItem = () => {
+const CardItem = ({ title, videoUrl }) => {
+  const handleCardClick = () => {
+    window.open(videoUrl, '_blank');
+  };
   return (
-    <MDBCard className='w-100 h-2'>
+    <MDBCard className='w-100 h-2' onClick={handleCardClick}>
       <MDBRipple
         rippleColor='light'
         rippleTag='div'
-        className='bg-image hover-overlay'
+        className='bg-video hover-overlay'
       >
-        <MDBCardImage
-          src='https://mdbootstrap.com/img/new/standard/nature/111.webp'
-          fluid
-          alt='...'
-        />
+        <video controls width='100%'>
+          <source src={videoUrl} type='video/mp4' />
+        </video>
         <a>
           <div
             className='mask'
@@ -30,10 +28,9 @@ const CardItem = () => {
         </a>
       </MDBRipple>
       <MDBCardBody>
-        <MDBCardTitle>Card title</MDBCardTitle>
+        <MDBCardTitle>{title}</MDBCardTitle>
       </MDBCardBody>
     </MDBCard>
   );
 };
-
 export default CardItem;
